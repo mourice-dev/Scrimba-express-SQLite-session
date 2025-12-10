@@ -3,7 +3,6 @@
 import { getDBConnection } from "../db/db.js";
 
 export async function addToCart(req, res) {
-
   try {
     const db = await getDBConnection();
     const productId = parseInt(req.body.productId, 10);
@@ -35,12 +34,30 @@ export async function addToCart(req, res) {
         [userId, productId]
       );
     }
-    
-    await db.close();
-    res.json({ message: 'Added to cart' });
 
+    await db.close();
+    res.json({ message: "Added to cart" });
   } catch (err) {
     console.error("addToCart error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
+  // }
+  // *
+  // Challenge:
+
+  // 1. Write code to ensure that when a logged-in user clicks 'Add to Cart', their current cart count is shown in the header with a cart icon. The frontend has been done for you. All the backend need do is provide the following JSON on the /api/cart/cart-count endpoint:
+  // { <THE TOTAL NUMBER OF THE USER'S ITEMS> || 0 }
+
+  // Ignore frontend console errors for now!
+
+  // For testing, log in with:
+  // Username: test
+  // Password: test
+
+  // Loads of help in hint.md
+  // */
+
+  
+
+
 }
