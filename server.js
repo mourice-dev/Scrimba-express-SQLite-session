@@ -7,6 +7,7 @@ import { meRouter } from "./routes/me.js";
 import { cartRouter } from "./routes/cart.js";
 import session from "express-session";
 
+// Initialize Express app
 const app = express();
 const PORT = 8000;
 const secret = process.env.SPIRAL_SESSION_SECRET || "jellyfish-baskingshark";
