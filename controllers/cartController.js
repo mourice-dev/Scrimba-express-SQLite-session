@@ -2,6 +2,7 @@
 
 import { getDBConnection } from "../db/db.js";
 
+// Add a product to the user's cart
 export async function addToCart(req, res) {
   const db = await getDBConnection();
 
@@ -113,12 +114,35 @@ export async function deleteItem(req, res) {
     await db.close();
 
     if (result.changes === 0) {
-      return res.status(404).json({ error: "Item not found or not authorized" });
+      return res
+        .status(404)
+        .json({ error: "Item not found or not authorized" });
     }
 
     res.json({ message: "Item deleted successfully" });
   } catch (err) {
     console.error("deleteItem error:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function deleteAll(req, res) {
+  try {
+    const db = await getDBConnection();
+    const userId = req.session.userId;
+
+    if (!userId) {
+      await db.close();
+      return res.status(401).json({ error: "User not logged in" });
+    }
+
+    await db.run("DELETE FROM cart_items WHERE user_id = ?", [userId]);
+
+    await db.close();
+
+    res.sendStatus(204);
+  } catch (err) {
+    console.error("deleteAll error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 }
